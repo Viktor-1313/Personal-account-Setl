@@ -1,0 +1,2300 @@
+fjn<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет сотрудника | SetiGroup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f8fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .sidebar {
+            width: 240px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: 1px solid #e0e0e0;
+            padding-top: 24px;
+        }
+        .sidebar h2 {
+            margin: 0 0 24px 24px;
+            font-size: 22px;
+            color: #b22222;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0 0 0 24px;
+        }
+        .sidebar ul li {
+            margin-bottom: 18px;
+        }
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #444;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+        .sidebar ul li a:hover {
+            color: #b22222;
+        }
+        .main-content {
+            margin-left: 260px;
+            padding: 32px 48px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .profile-photo {
+            width: 80px;
+            height: 80px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            margin-right: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #b22222;
+            overflow: hidden;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .profile-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .profile-details-row {
+            display: flex;
+            align-items: center;
+        }
+        .profile-details h1 {
+            margin: 0;
+            font-size: 26px;
+            color: #222;
+        }
+        .profile-balance {
+            margin-left: 24px;
+            font-size: 16px;
+            color: #b22222;
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-weight: bold;
+            border: 1px solid #ffeeba;
+        }
+        .profile-details p {
+            margin: 6px 0 0 0;
+            color: #666;
+            font-size: 16px;
+        }
+        .dashboard-cards {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 36px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 24px;
+            flex: 1;
+            min-width: 200px;
+            cursor: pointer;
+        }
+        .card-title {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        .card-value {
+            font-size: 26px;
+            color: #b22222;
+            font-weight: bold;
+        }
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #222;
+            margin-bottom: 16px;
+        }
+        .vacation-planner {
+            display: flex;
+            gap: 32px;
+        }
+        .vacation-form {
+            flex: 1;
+        }
+        .vacation-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .vacation-form input[type="date"] {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 14px;
+            width: 100%;
+        }
+        .vacation-form button {
+            background: #b22222;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .vacation-form button:hover {
+            background: #a51c1c;
+        }
+        .vacation-table {
+            flex: 2;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        th, td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #ececec;
+            text-align: left;
+        }
+        th {
+            background: #f3f3f3;
+            color: #b22222;
+        }
+        .department-link {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 8px 18px;
+            background: #e9ecef;
+            color: #b22222;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.2s;
+            border: 1px solid #d1d1d1;
+        }
+        .department-link:hover {
+            background: #ffe5e5;
+        }
+
+
+#ganttTooltip {
+  position: absolute;
+  min-width: 220px;
+  max-width: 260px;
+  padding: 10px 16px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #b22222;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 100;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  opacity: 0;
+  visibility: hidden;
+}
+#ganttTooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.calendar-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+.calendar-table td, .calendar-table th {
+    width: 38px;
+    height: 38px;
+    text-align: center;
+    border: 1px solid #ececec;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.calendar-table td.selected {
+    background: #f4b183;
+    color: #b22222;
+    font-weight: bold;
+}
+.calendar-table td.today {
+    border: 2px solid #b22222;
+}
+.calendar-table td.disabled {
+    background: #f7f7f7;
+    color: #bbb;
+    cursor: default;
+}
+
+.trip-date-tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.trip-date-tooltip:hover::after {
+  content: "В случае, если командировка закончена, пожалуйста, загрузите сканированные билеты";
+  position: absolute;
+  left: 50%;
+  top: 120%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #333;
+  border: 1px solid #b22222;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  white-space: pre-line;
+  z-index: 10;
+  min-width: 220px;
+}
+
+
+
+        /* Модальное окно для структуры департамента */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.25);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 32px 24px 32px;
+            min-width: 340px;
+            max-width: 95vw;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            font-size: 20px;
+            color: #b22222;
+            cursor: pointer;
+        }
+        .department-structure {
+            margin-top: 12px;
+        }
+        .person-block {
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .person-photo {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            margin-right: 14px;
+            overflow: hidden;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #b22222;
+            cursor: pointer;
+        }
+        .add-photo-btn {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+       
+        /* Salary modal */
+        .salary-modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.25);
+            justify-content: center;
+            align-items: center;
+        }
+        .salary-modal-content {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 32px 24px 32px;
+            min-width: 350px;
+            max-width: 98vw;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .salary-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 20px;
+            color: #b22222;
+            cursor: pointer;
+        }
+        .salary-modal-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            gap: 18px;
+        }
+        .salary-modal-arrow {
+            font-size: 22px;
+            color: #b22222;
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .salary-modal-arrow:hover {
+            background: #ffe5e5;
+        }
+        .salary-modal-month {
+            font-size: 22px;
+            font-weight: bold;
+            color: #222;
+            min-width: 90px;
+            text-align: center;
+        }
+        .salary-slip-table {
+            margin-top: 10px;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        .salary-slip-table th, .salary-slip-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #ececec;
+            text-align: left;
+        }
+        .salary-slip-table th {
+            background: #f3f3f3;
+            color: #b22222;
+        }
+        .salary-slip-summary {
+            margin-top: 14px;
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            text-align: right;
+        }
+        /* Быстрые действия */
+        .quick-actions {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+        }
+        .action-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 20px 28px;
+            min-width: 220px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: box-shadow 0.2s;
+        }
+        .action-card:hover {
+            box-shadow: 0 4px 18px rgba(178,34,34,0.13);
+        }
+        .action-card .action-icon {
+            font-size: 32px;
+            margin-right: 18px;
+        }
+        .action-card .action-title {
+            font-size: 17px;
+            color: #b22222;
+            font-weight: bold;
+        }
+        /* HR card */
+        .hr-card {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 36px;
+            max-width: 350px;
+            position: relative;
+            cursor: pointer;
+        }
+        .hr-photo {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: #e0e0e0 url('https://randomuser.me/api/portraits/women/44.jpg') center/cover no-repeat;
+            margin-right: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #b22222;
+            position: relative;
+        }
+        .hr-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .hr-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #222;
+        }
+        .hr-tooltip {
+            display: none;
+            position: absolute;
+            left: 70px;
+            top: 10px;
+            background: #fffbe7;
+            color: #b22222;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 15px;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .hr-card:hover .hr-tooltip {
+            display: block;
+        }
+        /* Social package */
+        .social-block {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        .social-title {
+            font-size: 20px;
+            color: #b22222;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .social-items {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 120px;
+            margin-bottom: 12px;
+        }
+        .social-icon {
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+        .social-label {
+            font-size: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+ /* Gantt modal */
+        .gantt-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.25);
+            justify-content: center;
+            align-items: center;
+        }
+        .gantt-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px 32px 18px 32px;
+  max-width: 980px;
+  margin: 40px auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.gantt-modal-close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  font-size: 30px;
+  color: #888;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.gantt-modal-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.gantt-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 18px;
+  margin-bottom: 4px;
+}
+
+.gantt-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.gantt-legend-color {
+  display: inline-block;
+  width: 18px;
+  height: 10px;
+  border-radius: 3px;
+  margin-right: 2px;
+  border: 1px solid #e0e0e0;
+}
+
+#ganttTooltip {
+  position: absolute;
+  min-width: 200px;
+  max-width: 260px;
+  padding: 10px 16px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #b22222;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s;
+}
+
+#ganttTooltip.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gantt-modal-note {
+  font-size: 15px;
+  color: #888;
+  margin-top: 16px;
+  text-align: center;
+}
+        }
+
+        /* Модальные окна */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 4000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.25);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content2 {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 32px 24px 32px;
+            min-width: 330px;
+            max-width: 96vw;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .modal-close2 {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            font-size: 20px;
+            color: #b22222;
+            cursor: pointer;
+        }
+        .modal-list {
+            margin-top: 12px;
+            font-size: 17px;
+            color: #444;
+        }
+        .modal-list div {
+            margin-bottom: 10px;
+        }
+        .modal-note {
+            font-size: 16px;
+            color: #b22222;
+            margin-top: 18px;
+        }
+        .modal-form label {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .modal-form textarea {
+            width: 100%;
+            min-height: 60px;
+            border-radius: 7px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 15px;
+        }
+        .modal-form button {
+            background: #b22222;
+            color: #fff;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+        .modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 5000;
+            left: 0; top: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 900px) {
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .sidebar {
+                display: none;
+            }
+            .dashboard-cards {
+                flex-direction: column;
+            }
+            .vacation-planner {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 500px) {
+            .salary-modal-content {
+                min-width: 0;
+                padding: 8px;
+            }
+        }
+
+
+.footer-confidential {
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    color: #888;
+    background: #f7f7f7;
+    padding: 18px 0 14px 0;
+    border-top: 1px solid #e0e0e0;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    letter-spacing: 0.2px;
+}
+@media (max-width: 600px) {
+    .footer-confidential {
+        font-size: 13px;
+        padding: 12px 0 10px 0;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>SetlGroup</h2>
+        <ul>
+            <li><a href="https://setl.corppn.ru/stream/">Главная</a></li>
+            <li><a href="http://phonesearch.corppn.ru/">Сотрудники</a></li>
+            <li><a href="https://setl.corppn.ru/employees/info.php">Документы</a></li>
+            <li><a href="https://setl.corppn.ru/company/structure.php">Компания</a></li>
+            <li><a href="https://job.setlgroup.ru/vacancies">Вакансии</a></li>
+            
+        </ul>
+    </div>
+    <div class="main-content">
+        
+        <!-- Профиль -->
+    <div class="profile-header">
+            <div class="profile-photo" id="profilePhoto" title="Нажмите, чтобы выбрать фото">
+                <img id="profileImg" src="I.png" alt="Фото профиля" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            </div>
+            <input type="file" id="photoInput" accept="image/*" style="display:none;">
+            <div class="profile-details">
+                <div class="profile-details-row">
+                    <h1>Дрига Виктор Александрович</h1>
+                    <span class="profile-balance" id="setlBalance" style="cursor:pointer; text-decoration:underline;">
+  Баланс: 10 
+  <img src="setlbon.svg" alt="сетлбоны" style="height:22px; vertical-align:middle; margin-left:4px;">
+</span>
+                </div>
+                <p>Должность: специалист по планированию</p>
+                <p>Отдел: отдел развития цифровых технологий</p>
+                <p>Огранизация: ООО "СетлТех"</p>
+                <a class="department-link" id="openStructure" href="#">Структура отдела</a>
+            </div>
+        </div>
+
+<!-- Карточки -->
+        <div class="dashboard-cards">
+            <div class="card" id="salaryCard">
+                <div class="card-title">Текущая зарплата</div>
+                <div class="card-value" id="salary-value">50 000 ₽</div>
+            </div>
+<div class="card" id="experienceCard">
+    <div class="card-title">Стаж работы</div>
+    <div class="card-value" id="experience-value">8 мес.</div>
+</div>
+<div class="card" id="vacationDaysCard">
+    <div class="card-title">Дней отпуска доступно</div>
+    <div class="card-value" id="vacation-days">14</div>
+</div>
+        </div>
+
+
+<!-- Планирование отпуска -->
+<div class="section">
+    <div class="section-title" style="display:flex; align-items:center;">
+        <span style="font-size:20px; color:#222;">Планирование отпуска</span>
+        <span id="openGantt"
+              style="font-size:20px; color:#222; cursor:pointer; text-decoration:underline; margin-left:400px;">
+            Отпуска сотрудников отдела
+        </span>
+    </div>
+    <div class="vacation-planner" style="display:flex; gap:32px;">
+        <div class="vacation-form">
+            <form id="vacationRequestForm">
+            
+                <form id="vacationRequestForm">
+    <label for="start-date">Дата начала отпуска:</label>
+    <input type="date" id="start-date" name="start-date" required>
+    <label for="end-date">Дата окончания отпуска:</label>
+    <input type="date" id="end-date" name="end-date" required>
+<div style="display:flex; gap:18px; margin-top:18px;">
+    <button type="submit" id="planVacationBtn" class="vacation-tile-btn red-btn">
+        Запланировать отпуск
+    </button>
+    <button type="button" id="calcVacationPayBtn" class="vacation-tile-btn red-btn">
+        Расчёт отпускных
+    </button>
+</div>
+            </form>
+            <div id="vacation-message" style="margin-top:12px;color:#b22222;"></div>
+        </div>
+        <div class="vacation-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Сотрудник</th>
+                        <th>Период отпуска</th>
+                    </tr>
+                </thead>
+                <tbody id="dept-vacations">
+                    <tr>
+                        <td>Малыхин Михаил</td>
+                        <td>15.07.2025 – 28.07.2025</td>
+                    </tr>
+                    <tr>
+                        <td>Колбасов Александр</td>
+                        <td>01.08.2025 – 14.08.2025</td>
+                    </tr>
+                    <tr>
+                        <td>Кольдрус Максим</td>
+                        <td>05.09.2025 – 18.09.2025</td>
+                    </tr>
+                    <tr>
+                        <td>Никитин Никита</td>
+                        <td>05.10.2025 – 18.10.2025</td>
+                    </tr>
+                    <tr>
+                        <td>Лучка Даниил</td>
+                        <td>05.11.2025 – 18.11.2025</td>
+                    </tr>
+                    <tr>
+                        <td>Прокофьев Константин</td>
+                        <td>05.11.2025 – 18.11.2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+        <!-- История отпусков -->
+        <div class="section">
+            <div class="section-title">История отпусков</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Период</th>
+                        <th>Дней</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody id="my-vacations">
+                    <tr>
+                        <td>09.06.2025 – 11.06.2025</td>
+                        <td>3</td>
+                        <td>Одобрен</td>
+                    </tr>
+                    <tr>
+                        <td>25.08.2024 – 10.09.2024</td>
+                        <td>14</td>
+                        <td>Одобрен</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+<div class="section" id="businessTripsSection">
+    <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        Командировки
+        <button id="planTripBtn" style="background:#b22222;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-size:15px;cursor:pointer;">
+            Запланировать командировку
+        </button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Город</th>
+                <th>Дата туда</th>
+                <th>Дата обратно</th>
+                <th></th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Москва</td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="1" style="color:#007bff;text-decoration:underline;">
+                        10.06.2025
+                    </span>
+                </td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="1" style="color:#007bff;text-decoration:underline;">
+                        15.06.2025
+                    </span>
+                </td>
+                <td>
+                    <button class="add-files-btn" data-trip="1" style="background:#007bff;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:14px;cursor:pointer;">
+                        Добавить&nbsp;доп. файлы
+                    </button>
+                </td>
+                <td>
+                    <span class="trip-status" style="color:#007bff;font-weight:bold;">Завершено</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Казань</td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="2" style="color:#007bff;text-decoration:underline;">
+                        22.09.2025
+                    </span>
+                </td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="2" style="color:#007bff;text-decoration:underline;">
+                        27.09.2025
+                    </span>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <span class="trip-status" style="color:#28a745;font-weight:bold;">Запланировано</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Новосибирск</td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="3" style="color:#007bff;text-decoration:underline;">
+                        15.10.2025
+                    </span>
+                </td>
+                <td>
+                    <span class="trip-date trip-date-tooltip" data-trip="3" style="color:#007bff;text-decoration:underline;">
+                        22.10.2025
+                    </span>
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <span class="trip-status" style="color:#28a745;font-weight:bold;">Запланировано</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+        <!-- Быстрые действия -->
+        <div class="quick-actions">
+            <div class="action-card" id="openDocs">
+                <span class="action-icon">&#128196;</span>
+                <span class="action-title">Ваши документы</span>
+            </div>
+            <div class="action-card" id="openRequests">
+                <span class="action-icon">&#128221;</span>
+                <span class="action-title">Подача заявлений и справок</span>
+            </div>
+            <div class="action-card" id="openLearning">
+                <span class="action-icon">&#128218;</span>
+                <span class="action-title">Обучение и развитие</span>
+            </div>
+            <div class="action-card" id="openOnboarding">
+                <span class="action-icon">&#127891;</span>
+                <span class="action-title">Онбординг и адаптация</span>
+            </div>
+            <div class="action-card" id="openKPI">
+                <span class="action-icon">&#9881;</span>
+                <span class="action-title">KPI-ключевые показатели эффективности</span>
+            </div>
+        </div>
+        <!-- HR-специалист -->
+        <div class="hr-card" id="hrCard">
+            <div class="hr-photo"></div>
+            <div class="hr-info">
+                <span class="hr-name">Анна Иванова</span>
+                <span style="font-size:14px;color:#888;">HR-специалист</span>
+            </div>
+            <div class="hr-tooltip">+7 (921) 123-45-67</div>
+        </div>
+        <!-- Социальный пакет -->
+       <div class="social-block">
+    <div class="social-title">Социальный пакет</div>
+    <div class="social-items">
+        <a class="social-item" href="https://setl.corppn.ru/library/documents.php?SECTION_ID=1229" target="_blank" style="text-decoration:none;">
+            <span class="social-icon">&#129309;</span>
+            <span class="social-label">Материальная помощь</span>
+        </a>
+        <a class="social-item" href="https://setlgroup.ru/projects?utm_source=yandex&utm_medium=cpc&utm_campaign=mpn|setlgroup_s_spb_brand_02-25_nn|117645888|search&utm_content=5534925659|16929853832|54168019973|none|desktop|16929853832|type1|54168019973|54168019973|1|premium|2&utm_term=Setl+group&cm_id=117645888_5534925659_16929853832_54168019973_54168019973_none_search_type1_no_desktop_premium_2&yclid=8693525949200728063" target="_blank" style="text-decoration:none;">
+            <span class="social-icon">&#128176;</span>
+            <span class="social-label">Скидки</span>
+        </a>
+        <div class="social-item">
+            <span class="social-icon">&#128178;</span>
+            <span class="social-label">Компенсации</span>
+        </div>
+        <a class="social-item" href="https://reso.ru/service/agents-search/?utm_source=yandex&utm_medium=cpc&utm_campaign=site_brand_common&yclid=8587809669294063615" target="_blank" style="text-decoration:none;">
+            <span class="social-icon">&#10084;&#65039;</span>
+            <span class="social-label">Страхование жизни</span>
+        </a>
+        <a class="social-item" href="https://setl.corppn.ru/employees/vmi.php" target="_blank" style="text-decoration:none;">
+            <span class="social-icon">&#128137;</span>
+            <span class="social-label">ДМС</span>
+        </a>
+    </div>
+</div>
+    </div>
+  
+
+ <!-- Модальное окно структуры отдела -->
+<div class="modal" id="structureModal">
+    <div class="modal-content">
+        <span class="modal-close" id="closeStructure">&times;</span>
+        <div class="section-title" style="margin-top:0;">Структура отдела развития цифровых технологий</div>
+        <div class="department-structure">
+           
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="malihin.png" alt="Малыхин М.А." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div style="font-weight:bold;">Директор: Малыхин М.А.</div>
+                
+            </div>
+
+            <div class="person-block" style="margin-bottom:24px;">
+                <div class="person-photo">
+                    <img class="person-img" src="kolbasov.png" alt="Колбасов А.В." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Зам. директора: Колбасов А.В.</div>
+                </div>
+            </div>
+
+            <div class="person-block" style="margin-bottom:24px;">
+                <div class="person-photo">
+                    <img class="person-img" src="samsonov.png" alt="Самсонов А.В." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Ведущий менеджер: Самсонов А.В.</div>
+                </div>
+            </div>
+
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="elesina.png" alt="Елесина К.М." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Менеджер по внешним продуктам: Елесина К.М.</div>
+                </div>
+            </div>
+
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="I.png" alt="Дрига В.А." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Специалист по планированию: Дрига В.А.</div>
+                </div>
+            </div>
+
+            <div style="font-weight:bold; margin-bottom:8px;">Направление внедрения ПО:</div>
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="koldrus.png" alt="Кольдрус М.А." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Руководитель направления: Кольдрус М.А.</div>
+                </div>
+            </div>
+
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="nikitin.png" alt="Никитин Н.А." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Ведущий специалист: Никитин Н.А.</div>
+                </div>
+            </div>
+
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="luchka.png" alt="Лучка Д.С." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Младший специалист: Лучка Д.С.</div>
+                </div>
+            </div>
+
+            <div class="person-block">
+                <div class="person-photo">
+                    <img class="person-img" src="prokofev.png" alt="Прокофьев К.Б." style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                </div>
+                <div>
+                    <div>Младший специалист: Прокофьев К.Б.</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <!-- Модальные окна для новых функций -->
+    
+
+<div class="modal-bg" id="vacationPayModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:4000;align-items:center;justify-content:center;">
+    <div class="modal-content2" style="background:#fff;min-width:320px;max-width:90vw;padding:24px;border-radius:8px;position:relative;">
+        <span id="closeVacationPayModal" style="position:absolute;top:10px;right:16px;font-size:24px;cursor:pointer;">&times;</span>
+        <div style="font-size:18px;font-weight:bold;color:#007bff;margin-bottom:14px;">
+            Расчёт отпускных
+        </div>
+        <div id="vacationPayInfo" style="font-size:16px;margin-bottom:10px;"></div>
+        <div id="vacationPaySum" style="font-size:18px;font-weight:bold;color:#222;"></div>
+        <!-- Новая надпись внизу окна -->
+        <div style="font-size:15px;color:#888;margin-top:18px;text-align:center;">
+            Расчёт примерный. Подлежит пересчёту специалистом отдела заработной платы.
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal-bg" id="photoModal">
+    <div style="position:relative;">
+        <span class="modal-close2" id="closePhotoModal" style="position:absolute;top:10px;right:16px;font-size:28px;color:#fff;cursor:pointer;z-index:2;">&times;</span>
+        <img id="modalPhotoImg" src="" alt="Фото" style="max-width:90vw;max-height:90vh;display:block;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.18);background:#fff;">
+    </div>
+</div>
+
+<!-- Ваши документы -->
+    <div class="modal-bg" id="docsModal">
+        <div class="modal-content2">
+            <span class="modal-close2" id="closeDocsModal">&times;</span>
+            <div style="font-size:19px;font-weight:bold;color:#b22222;">Ваши документы</div>
+            <div class="modal-list">
+                <div>Паспорт.pdf</div>
+                <div>Договор.pdf</div>
+                <div>Свидетельство о рождении ребенка.pdf</div>
+                <div>Дополнительное соглашение к договору.pdf</div>
+            </div>
+        </div>
+    </div>
+
+
+<div class="modal-bg" id="vacationPayModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:4000;align-items:center;justify-content:center;">
+    <div class="modal-content2" style="background:#fff;min-width:320px;max-width:90vw;padding:24px;border-radius:8px;position:relative;">
+        <span id="closeVacationPayModal" style="position:absolute;top:10px;right:16px;font-size:24px;cursor:pointer;">&times;</span>
+        <div style="font-size:18px;font-weight:bold;color:#007bff;margin-bottom:14px;">
+            Расчёт отпускных
+        </div>
+        <div id="vacationPayInfo" style="font-size:16px;margin-bottom:10px;"></div>
+        <div id="vacationPaySum" style="font-size:18px;font-weight:bold;color:#222;"></div>
+    </div>
+</div>
+
+
+
+<!-- Модальное окно загрузки документов для командировки -->
+<div class="modal-bg" id="tripUploadModal">
+    <div class="modal-content2" style="min-width:340px;">
+        <span class="modal-close2" id="closeTripUploadModal">&times;</span>
+        <div style="font-size:18px;font-weight:bold;color:#b22222;margin-bottom:12px;">
+            Загрузите документы
+        </div>
+        <form id="tripUploadForm">
+            <input type="file" id="tripFiles" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="margin-bottom:14px;" />
+            <div id="tripFilesList" style="margin-bottom:10px;font-size:15px;color:#222;"></div>
+            <button type="submit" style="background:#b22222;color:#fff;border:none;padding:9px 22px;border-radius:6px;font-size:15px;cursor:pointer;">
+                Загрузить
+            </button>
+        </form>
+        <div id="tripUploadStatus" class="modal-note" style="display:none;"></div>
+    </div>
+</div>
+
+
+
+    <!-- Подача заявлений и справок -->
+    <div class="modal-bg" id="requestsModal">
+        <div class="modal-content2">
+            <span class="modal-close2" id="closeRequestsModal">&times;</span>
+            <div style="font-size:19px;font-weight:bold;color:#b22222;">Заявления и справки</div>
+            <div class="modal-list">
+                <div>Форма-4</div>
+                <div>О начислениях</div>
+                <div>Заявление на отпуск</div>
+                <div>Заявление на отпуск без оплаты</div>
+            </div>
+        </div>
+    </div>
+    <!-- Онбординг -->
+    <div class="modal-bg" id="onboardingModal">
+        <div class="modal-content2">
+            <span class="modal-close2" id="closeOnboardingModal">&times;</span>
+            <div class="modal-note">Здесь будет переход на страницу адаптации</div>
+        </div>
+    </div>
+    <!-- HR письмо -->
+    <div class="modal-bg" id="hrMailModal">
+        <div class="modal-content2">
+            <span class="modal-close2" id="closeHrMailModal">&times;</span>
+            <div style="font-size:19px;font-weight:bold;color:#b22222;">Связаться с HR</div>
+            <form class="modal-form" id="hrMailForm">
+                <label for="hrMsg">Сообщение:</label>
+                <textarea id="hrMsg" required placeholder="Введите текст сообщения..."></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+            <div id="hrMailStatus" class="modal-note" style="display:none;"></div>
+        </div>
+    </div>
+    <!-- Salary Modal -->
+    <div class="salary-modal-bg" id="salaryModal">
+        <div class="salary-modal-content">
+            <span class="salary-modal-close" id="closeSalaryModal">&times;</span>
+            <div class="salary-modal-nav">
+                <span class="salary-modal-arrow" id="salaryPrev">&#8592;</span>
+                <span class="salary-modal-month" id="salaryMonth">Июнь</span>
+                <span class="salary-modal-arrow" id="salaryNext">&#8594;</span>
+            </div>
+            <div id="salarySlipContent"></div>
+        </div>
+    </div>
+
+<!-- Модальное окно стажа работы -->
+<div class="modal-bg" id="experienceModal">
+    <div class="modal-content2">
+        <span class="modal-close2" id="closeExperienceModal">&times;</span>
+        <div style="font-size:19px;font-weight:bold;color:#b22222;margin-bottom:12px;">
+            Стаж работы
+        </div>
+        <div class="modal-list" style="font-size:16px;">
+            <div>ООО "СетлТех" — специалист по планированию<br><span style="color:#888;">06.12.2024 – по настоящее время</span></div>
+            <div>ООО "Геоизол" — ведущий специалист<br><span style="color:#888;">09.09.2024 – 02.12.2024</span></div>
+            <div>ОАО "Норникель" — главный специалист<br><span style="color:#888;">10.11.2022 – 18.06.2024</span></div>
+            <div>ООО "СеверныйБыт" — инженер 1 категории<br><span style="color:#888;">01.09.2022 – 01.09.2023</span></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Модальное окно календаря отпуска -->
+<div class="modal-bg" id="vacationCalendarModal">
+    <div class="modal-content2" style="align-items:center;">
+        <span class="modal-close2" id="closeVacationCalendar" style="right:16px;">&times;</span>
+        <div style="font-size:19px;font-weight:bold;color:#b22222;margin-bottom:12px;">
+            Выберите дату начала отпуска
+        </div>
+        <div style="display:flex;align-items:center;gap:18px;margin-bottom:12px;">
+            <button id="prevMonthBtn" style="font-size:22px;">&#8592;</button>
+            <span id="calendarMonthLabel" style="font-size:17px;font-weight:bold;"></span>
+            <button id="nextMonthBtn" style="font-size:22px;">&#8594;</button>
+        </div>
+        <div id="calendarContainer"></div>
+    </div>
+</div>
+
+<div class="modal-bg" id="addFilesModal">
+    <div class="modal-content2" style="min-width:340px;">
+        <span class="modal-close2" id="closeAddFilesModal">&times;</span>
+        <div style="font-size:18px;font-weight:bold;color:#007bff;margin-bottom:12px;">
+            Загрузите дополнительные файлы
+        </div>
+        <form id="addFilesForm">
+            <input type="file" id="addFilesInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="margin-bottom:14px;" />
+            <div id="addFilesList" style="margin-bottom:10px;font-size:15px;color:#222;"></div>
+            <button type="submit" style="background:#007bff;color:#fff;border:none;padding:9px 22px;border-radius:6px;font-size:15px;cursor:pointer;">
+                Загрузить
+            </button>
+        </form>
+        <div id="addFilesStatus" class="modal-note" style="display:none;"></div>
+    </div>
+</div>
+
+
+<div class="gantt-modal" id="ganttModal">
+  <div class="gantt-modal-content">
+    <span class="gantt-modal-close" id="closeGantt">&times;</span>
+    <div class="section-title">
+      График отпусков сотрудников отдела <span style="font-size:16px; color:#555;">(2025)</span>
+    </div>
+    <div class="gantt-modal-subtitle">
+      Наведите курсор на полосу, чтобы увидеть детали отпуска.
+    </div>
+    <canvas id="ganttChart" width="900" height="340"></canvas>
+    <!-- Легенда сотрудников -->
+    <div class="gantt-legend">
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#42a5f5;"></span> Малыхин Михаил
+      </div>
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#66bb6a;"></span> Колбасов Александр
+      </div>
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#ffa726;"></span> Кольдрус Максим
+      </div>
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#8B00FF;"></span> Никитин Никита
+      </div>
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#FF0000;"></span> Лучка Даниил
+      </div>
+      <div class="gantt-legend-item">
+        <span class="gantt-legend-color" style="background:#30D5C8;"></span> Прокофьев Константин
+      </div>
+    </div>
+    <div id="ganttTooltip"></div>
+    <div class="gantt-modal-note">
+      График составлен для вашего удобства. Для точной информации обращайтесь в отдел кадров.
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-bg" id="kpiModal">
+    <div class="modal-content2">
+        <span class="modal-close2" id="closeKpiModal">&times;</span>
+        <div style="font-size:19px;font-weight:bold;color:#b22222;margin-bottom:12px;">
+            KPI — ключевые показатели эффективности
+        </div>
+        <div class="modal-list" style="width:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <div>
+                    <b>1. Количественные KPI:</b><br>
+                    <span style="font-size:15px;">Соблюдение сроков планирования</span><br>
+                    <span style="color:#888;font-size:14px;">Графики обновляются не позднее, чем за 3 рабочих дня до начала периода.</span>
+                </div>
+                <span style="font-size:20px;font-weight:bold;color:#b22222;">55&nbsp;%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <b>2. Качественные KPI:</b><br>
+                    <span style="font-size:15px;">Точность прогнозов</span><br>
+                    <span style="color:#888;font-size:14px;">Оценка точности составленных прогнозов по срокам и ресурсам.</span>
+                </div>
+                <span style="font-size:20px;font-weight:bold;color:#b22222;">25&nbsp;%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <b>3. Личные качества:</b><br>
+                    <span style="font-size:15px;">Личностные качества</span><br>
+                    <span style="color:#888;font-size:14px;">Ответственность, исполнительская дисциплина, внимательность к деталям, коммуникабельность, организованность.</span>
+                </div>
+                <span style="font-size:20px;font-weight:bold;color:#b22222;">20&nbsp;%</span>
+            </div>
+            <!-- Красная линия и "100%" -->
+            <div style="width:100%;border-bottom:3px solid #b22222;margin:18px 0 0 0;"></div>
+            <div style="width:100%;text-align:right;font-size:22px;font-weight:bold;color:#b22222;margin-top:6px;">
+                100%
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-bg" id="planTripModal">
+    <div class="modal-content2" style="min-width:340px; position:relative;">
+        <span class="modal-close2" id="closePlanTripModal" style="position:absolute;top:8px;right:8px;font-size:22px;cursor:pointer;">&times;</span>
+        <div style="font-size:18px;font-weight:bold;color:#b22222;margin-bottom:12px;">
+            Запланировать командировку
+        </div>
+        <form id="planTripForm">
+            <label for="tripCity" style="font-size:15px;">Город:</label>
+            <select id="tripCity" required style="margin-bottom:12px;width:100%;padding:7px;border-radius:6px;border:1px solid #ccc;">
+                <option value="">Выберите город</option>
+                <option value="Москва">Москва</option>
+                <option value="Южно-сахалинск">Южно-сахалинск</option>
+                <option value="Новосибирск">Новосибирск</option>
+                <option value="Екатеринбург">Екатеринбург</option>
+                <option value="Нижний Новгород">Нижний Новгород</option>
+                <option value="Казань">Казань</option>
+                <option value="Челябинск">Челябинск</option>
+                <option value="Омск">Омск</option>
+                <option value="Самара">Самара</option>
+                <option value="Ростов-на-Дону">Ростов-на-Дону</option>
+                <option value="Уфа">Уфа</option>
+                <option value="Волгоград">Волгоград</option>
+                <option value="Пермь">Пермь</option>
+                <option value="Красноярск">Красноярск</option>
+                <option value="Воронеж">Воронеж</option>
+            </select>
+            <label for="tripDateFrom" style="font-size:15px;">Дата туда:</label>
+            <input type="date" id="tripDateFrom" required style="margin-bottom:12px;width:100%;padding:7px;border-radius:6px;border:1px solid #ccc;" />
+            <label for="tripDateTo" style="font-size:15px;">Дата обратно:</label>
+            <input type="date" id="tripDateTo" required style="margin-bottom:16px;width:100%;padding:7px;border-radius:6px;border:1px solid #ccc;" />
+
+            <!-- Контейнер для двух кнопок по разным краям -->
+             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+                <button type="button" id="orderTicketsBtn" style="background:#007bff;color:#fff;border:none;padding:9px 22px;border-radius:6px;font-size:15px;cursor:pointer;">
+                 Заказать билеты
+                </button>
+             <button type="button" id="bookHotelBtn" style="background:#007bff;color:#fff;border:none;padding:9px 22px;border-radius:6px;font-size:15px;cursor:pointer;">
+                 Забронировать отель
+               </button>
+            </div>
+    <!-- Новая большая кнопка -->
+              <button type="button" id="submitForApprovalBtn" style="margin-top:22px;width:100%;background:#28a745;color:#fff;border:none;padding:15px 0;border-radius:8px;font-size:17px;font-weight:bold;cursor:pointer;">
+                Запланировать
+              </button>
+              <!-- Сообщение об отправке -->
+              <div id="approvalMsg" style="display:none;margin-top:16px;font-size:16px;color:#28a745;text-align:center;">
+                Спасибо! Направлено на согласование Руководству.
+              </div>
+        </form>
+    </div>
+</div>
+    <script>
+        // Загрузка фото для основного профиля
+const profilePhoto = document.getElementById('profilePhoto');
+const photoInput = document.getElementById('photoInput');
+const profileImg = document.getElementById('profileImg');
+
+profilePhoto.addEventListener('click', () => {
+    photoInput.click();
+});
+photoInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileImg.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+        // Открытие и закрытие модального окна структуры департамента
+        const openStructure = document.getElementById('openStructure');
+        const structureModal = document.getElementById('structureModal');
+        const closeStructure = document.getElementById('closeStructure');
+        openStructure.addEventListener('click', function(e) {
+            e.preventDefault();
+            structureModal.style.display = 'flex';
+        });
+        closeStructure.addEventListener('click', function() {
+            structureModal.style.display = 'none';
+        });
+        window.addEventListener('click', function(event) {
+            if (event.target === structureModal) {
+                structureModal.style.display = 'none';
+            }
+        });
+
+       
+
+        // Быстрые действия и модальные окна
+        document.getElementById('openDocs').onclick = function() {
+            document.getElementById('docsModal').style.display = 'flex';
+        };
+        document.getElementById('closeDocsModal').onclick = function() {
+            document.getElementById('docsModal').style.display = 'none';
+        };
+        document.getElementById('openRequests').onclick = function() {
+            document.getElementById('requestsModal').style.display = 'flex';
+        };
+        document.getElementById('closeRequestsModal').onclick = function() {
+            document.getElementById('requestsModal').style.display = 'none';
+        };
+        document.getElementById('openLearning').onclick = function() {
+            window.open('https://webtutor02.corppn.ru/view_doc.html?mode=home', '_blank');
+        };
+        document.getElementById('openOnboarding').onclick = function() {
+            document.getElementById('onboardingModal').style.display = 'flex';
+        };
+        document.getElementById('closeOnboardingModal').onclick = function() {
+            document.getElementById('onboardingModal').style.display = 'none';
+        };
+        // HR-специалист
+        document.getElementById('hrCard').onclick = function() {
+            document.getElementById('hrMailModal').style.display = 'flex';
+        };
+        document.getElementById('closeHrMailModal').onclick = function() {
+            document.getElementById('hrMailModal').style.display = 'none';
+        };
+        // Закрытие модальных окон по клику вне
+        window.addEventListener('click', function(event) {
+            ['docsModal','requestsModal','onboardingModal','hrMailModal'].forEach(function(id){
+                var modal = document.getElementById(id);
+                if (modal && event.target === modal) modal.style.display = 'none';
+            });
+        });
+        // HR письмо отправка
+        document.getElementById('hrMailForm').onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById('hrMailStatus').style.display = 'block';
+            document.getElementById('hrMailStatus').textContent = 'Сообщение отправлено!';
+            setTimeout(function(){
+                document.getElementById('hrMailModal').style.display = 'none';
+                document.getElementById('hrMailStatus').style.display = 'none';
+                document.getElementById('hrMsg').value = '';
+            }, 1400);
+        };
+
+        // Пример обработки формы отпуска
+        document.getElementById('vacationRequestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            const message = document.getElementById('vacation-message');
+            if(!start || !end) {
+                message.textContent = 'Пожалуйста, выберите даты.';
+                return;
+            }
+            if (start > end) {
+                message.textContent = 'Дата окончания не может быть раньше даты начала.';
+                return;
+            }
+            message.textContent = 'Заявка на отпуск отправлена!';
+        });
+
+        // Данные отпусков для Gantt
+        const ganttVacations = [
+            { name: "Малыхин Михаил", start: "2025-07-15", end: "2025-07-28" },
+            { name: "Колбасов Александр", start: "2025-08-01", end: "2025-08-14" },
+            { name: "Кольдрус Максим", start: "2025-09-05", end: "2025-09-18" },
+            { name: "Никитин Никита", start: "2025-10-05", end: "2025-10-18" },
+            { name: "Лучка Даниил", start: "2025-11-05", end: "2025-11-18" },
+            { name: "Прокофьев Константин", start: "2025-12-07", end: "2025-12-21" }
+        ];
+
+        const ganttModal = document.getElementById('ganttModal');
+        const openGantt = document.getElementById('openGantt');
+        const closeGantt = document.getElementById('closeGantt');
+
+        openGantt.addEventListener('click', function(e) {
+            ganttModal.style.display = 'flex';
+            drawGanttChart();
+        });
+        closeGantt.addEventListener('click', function() {
+            ganttModal.style.display = 'none';
+        });
+        window.addEventListener('click', function(event) {
+            if (event.target === ganttModal) {
+                ganttModal.style.display = 'none';
+            }
+        });
+
+        function drawGanttChart() {
+    const canvas = document.getElementById('ganttChart');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const ganttColors = [
+        '#42a5f5', '#66bb6a', '#ffa726', '#ab47bc', '#ec407a',
+        '#26a69a', '#ef5350', '#8d6e63', '#789262', '#7e57c2'
+    ];
+
+    const months = [
+        "Янв", "Фев", "Мар", "Апр", "Май", "Июн",
+        "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"
+    ];
+    const leftPad = 160;
+    const topPad = 50;
+    const rowHeight = 45;
+    const barHeight = 22;
+    const chartWidth = 700;
+    const chartStart = new Date("2025-01-01");
+    const chartEnd = new Date("2025-12-31");
+    const totalDays = Math.round((chartEnd - chartStart) / (1000*60*60*24)) + 1;
+
+    // Массив для хранения координат баров (для tooltip)
+    window.ganttBarCoords = [];
+
+    // Заголовки месяцев
+    ctx.font = "bold 13px Segoe UI, Arial";
+    ctx.fillStyle = "#444";
+    let x = leftPad;
+    for(let m=0; m<12; m++) {
+        let monthDays = new Date(2025, m+1, 0).getDate();
+        let monthWidth = chartWidth * (monthDays/365);
+        ctx.fillText(months[m], x + monthWidth/2 - 12, topPad - 18);
+        x += monthWidth;
+    }
+
+    // Линии месяцев
+    ctx.strokeStyle = "#e0e0e0";
+    x = leftPad;
+    for(let m=0; m<12; m++) {
+        let monthDays = new Date(2025, m+1, 0).getDate();
+        let monthWidth = chartWidth * (monthDays/365);
+        ctx.beginPath();
+        ctx.moveTo(x, topPad-7);
+        ctx.lineTo(x, topPad + rowHeight * ganttVacations.length + 10);
+        ctx.stroke();
+        x += monthWidth;
+    }
+
+    // Имена сотрудников и бары
+    window.ganttBarCoords.length = 0; // сбросить
+    ganttVacations.forEach((vac, idx) => {
+        let y = topPad + idx * rowHeight;
+        ctx.font = "15px Segoe UI, Arial";
+        ctx.fillStyle = "#b22222";
+        ctx.fillText(vac.name, 10, y + barHeight);
+
+        // Бар отпуска
+        let start = new Date(vac.start);
+        let end = new Date(vac.end);
+        let startOffset = Math.round((start - chartStart) / (1000*60*60*24));
+        let endOffset = Math.round((end - chartStart) / (1000*60*60*24));
+        let barX = leftPad + chartWidth * (startOffset/365);
+        let barW = chartWidth * ((endOffset - startOffset + 1)/365);
+
+        // Цветная полоса с тенью
+        ctx.save();
+        ctx.shadowColor = 'rgba(0,0,0,0.16)';
+        ctx.shadowBlur = 7;
+        ctx.fillStyle = ganttColors[idx % ganttColors.length];
+        ctx.fillRect(barX, y + 5, barW, barHeight);
+        ctx.restore();
+
+        ctx.strokeStyle = "#b22222";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(barX, y + 5, barW, barHeight);
+
+        // Даты на баре
+        ctx.font = "12px Segoe UI, Arial";
+        ctx.fillStyle = "#333";
+        ctx.fillText(
+            `${vac.start.replace(/2025-/,"").replace(/-/g,".")} – ${vac.end.replace(/2025-/,"").replace(/-/g,".")}`,
+            barX + 4, y + barHeight + 18
+        );
+
+        // Сохраняем координаты для tooltip
+        window.ganttBarCoords.push({
+            x: barX, y: y + 5, w: barW, h: barHeight,
+            name: vac.name,
+            start: vac.start,
+            end: vac.end,
+            days: Math.round((end - start) / (1000*60*60*24)) + 1
+        });
+    });
+
+    ctx.strokeStyle = "#bbb";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(leftPad, topPad - 7, chartWidth, rowHeight * ganttVacations.length + 10);
+}
+
+const ganttCanvas = document.getElementById('ganttChart');
+const ganttTooltip = document.getElementById('ganttTooltip');
+
+ganttCanvas.onmousemove = function(e) {
+  const rect = ganttCanvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  let found = false;
+
+  window.ganttBarCoords.forEach(bar => {
+    if (
+      x >= bar.x && x <= bar.x + bar.w &&
+      y >= bar.y && y <= bar.y + bar.h
+    ) {
+      ganttTooltip.innerHTML = `<b>${bar.name}</b><br>${bar.start.replace(/2025-/,"").replace(/-/g,".")} – ${bar.end.replace(/2025-/,"").replace(/-/g,".")}<br>Дней: ${bar.days}`;
+      ganttTooltip.classList.add('visible');
+      // Позиционируем tooltip чуть выше курсора
+      ganttTooltip.style.left = (e.pageX - 110) + 'px'; // 110 — половина min-width
+      ganttTooltip.style.top = (e.pageY - 50) + 'px';
+      found = true;
+    }
+  });
+  if (!found) ganttTooltip.classList.remove('visible');
+};
+ganttCanvas.onmouseleave = function() {
+  ganttTooltip.classList.remove('visible');
+};
+
+
+
+
+// Примерные данные по месяцам (с бонусами, надбавками и реальными рабочими днями/часами)
+const salaryData = [
+    {
+        month: 'Декабрь 2024',
+        slip: {
+            daysWorked: 22,
+            hoursWorked: '176 часов',
+            base: 50000,
+            bonus: 5000,         // Премия за выполнение плана
+            extraPay: 2000,      // Надбавка за выслугу лет
+            nightShift: 1000,    // Надбавка за ночные смены
+            holidayPay: 1500,    // Оплата за работу в праздники
+            ndfl: 6500,          // 13% НДФЛ
+            other: 0,
+            toPay: 53000         // К выплате на руки
+        }
+    },
+    {
+        month: 'Январь 2025',
+        slip: {
+            daysWorked: 23,
+            hoursWorked: '184 часов',
+            base: 50000,
+            bonus: 3000,         // Ежемесячная премия
+            extraPay: 2000,      // Надбавка за выслугу лет
+            nightShift: 0,
+            holidayPay: 0,
+            ndfl: 6760,
+            other: 0,
+            toPay: 48240
+        }
+    },
+    {
+        month: 'Февраль 2025',
+        slip: {
+            daysWorked: 20,
+            hoursWorked: '160 часов',
+            base: 50000,
+            bonus: 0,
+            extraPay: 2000,
+            nightShift: 1000,
+            holidayPay: 0,
+            ndfl: 6760,
+            other: 0,
+            toPay: 46240
+        }
+    },
+    {
+        month: 'Март 2025',
+        slip: {
+            daysWorked: 21,
+            hoursWorked: '168 часов',
+            base: 50000,
+            bonus: 5000,
+            extraPay: 0,
+            nightShift: 0,
+            holidayPay: 0,
+            ndfl: 6760,
+            other: 0,
+            toPay: 48240
+        }
+    },
+    {
+        month: 'Апрель 2025',
+        slip: {
+            daysWorked: 22,
+            hoursWorked: '176 часов',
+            base: 50000,
+            bonus: 0,
+            extraPay: 2000,
+            nightShift: 0,
+            holidayPay: 0,
+            ndfl: 6760,
+            other: 0,
+            toPay: 45240
+        }
+    },
+    {
+        month: 'Май 2025',
+        slip: {
+            daysWorked: 22,
+            hoursWorked: '176 часов',
+            base: 50000,
+            bonus: 3000,
+            extraPay: 2000,
+            nightShift: 0,
+            holidayPay: 1500,
+            ndfl: 7150,
+            other: 0,
+            toPay: 46450
+        }
+    },
+    {
+        month: 'Июнь 2025',
+        slip: {
+            daysWorked: 21,
+            hoursWorked: '168 часов',
+            base: 50000,
+            bonus: 0,
+            extraPay: 2000,
+            nightShift: 0,
+            holidayPay: 0,
+            ndfl: 6760,
+            other: 0,
+            toPay: 45240
+        }
+    }
+];
+
+
+
+        // Модальное окно зарплаты
+        const salaryCard = document.getElementById('salaryCard');
+        const salaryModal = document.getElementById('salaryModal');
+        const closeSalaryModal = document.getElementById('closeSalaryModal');
+        const salaryPrev = document.getElementById('salaryPrev');
+        const salaryNext = document.getElementById('salaryNext');
+        const salaryMonth = document.getElementById('salaryMonth');
+        const salarySlipContent = document.getElementById('salarySlipContent');
+
+        let currentSalaryIdx = salaryData.length - 1;
+
+        function updateSalaryModal() {
+    const data = salaryData[currentSalaryIdx];
+    salaryMonth.textContent = data.month;
+    salarySlipContent.innerHTML = `
+        <table class="salary-slip-table">
+            <tr><th>Отработано дней</th><td>${data.slip.daysWorked ?? '-'}</td></tr>
+            <tr><th>Отработано часов</th><td>${data.slip.hoursWorked ?? '-'}</td></tr>
+            <tr><th>Оклад</th><td>${data.slip.base.toLocaleString()} ₽</td></tr>
+            <tr><th>Премия</th><td>${data.slip.bonus?.toLocaleString() ?? 0} ₽</td></tr>
+            <tr><th>Надбавка за выслугу</th><td>${data.slip.extraPay?.toLocaleString() ?? 0} ₽</td></tr>
+            <tr><th>Ночные смены</th><td>${data.slip.nightShift?.toLocaleString() ?? 0} ₽</td></tr>
+            <tr><th>Праздничные</th><td>${data.slip.holidayPay?.toLocaleString() ?? 0} ₽</td></tr>
+            <tr><th>НДФЛ 13%</th><td style="color:#b22222;">-${data.slip.ndfl?.toLocaleString() ?? 0} ₽</td></tr>
+            <tr><th>Прочие удержания</th><td style="color:#b22222;">-${data.slip.other?.toLocaleString() ?? 0} ₽</td></tr>
+        </table>
+        <div class="salary-slip-summary">К выплате: ${data.slip.toPay.toLocaleString()} ₽</div>
+    `;
+}
+
+        salaryCard.addEventListener('click', function() {
+            salaryModal.style.display = 'flex';
+            updateSalaryModal();
+        });
+
+        closeSalaryModal.addEventListener('click', function() {
+            salaryModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === salaryModal) {
+                salaryModal.style.display = 'none';
+            }
+        });
+
+        salaryPrev.addEventListener('click', function() {
+            if (currentSalaryIdx > 0) {
+                currentSalaryIdx--;
+                updateSalaryModal();
+            }
+        });
+
+        salaryNext.addEventListener('click', function() {
+            if (currentSalaryIdx < salaryData.length - 1) {
+                currentSalaryIdx++;
+                updateSalaryModal();
+            }
+        });
+
+document.getElementById('setlBalance').onclick = function() {
+    window.open('https://setl.corppn.ru/shop/', '_blank');
+};
+
+// Открытие/закрытие KPI-модального окна
+document.getElementById('openKPI').onclick = function() {
+    document.getElementById('kpiModal').style.display = 'flex';
+};
+document.getElementById('closeKpiModal').onclick = function() {
+    document.getElementById('kpiModal').style.display = 'none';
+};
+// Закрытие по клику вне окна
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('kpiModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+// Для профиля
+document.getElementById('profileImg').onclick = function(e) {
+    var modal = document.getElementById('photoModal');
+    var modalImg = document.getElementById('modalPhotoImg');
+    modalImg.src = this.src;
+    modal.style.display = 'flex';
+};
+// Открытие увеличенного фото по клику
+
+
+document.querySelectorAll('.person-img').forEach(function(img) {
+  img.addEventListener('click', function() {
+    const modal = document.getElementById('photoModal');
+    const modalImg = document.getElementById('modalPhotoImg');
+    modalImg.src = this.src;
+    modal.style.display = 'flex';
+  });
+});
+
+// Закрытие модального окна
+document.getElementById('closePhotoModal').onclick = function() {
+    document.getElementById('photoModal').style.display = 'none';
+};
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('photoModal');
+    if (event.target === modal) modal.style.display = 'none';
+});
+
+
+
+// Открытие модального окна стажа работы
+document.getElementById('experienceCard').onclick = function() {
+    document.getElementById('experienceModal').style.display = 'flex';
+};
+// Закрытие по крестику
+document.getElementById('closeExperienceModal').onclick = function() {
+    document.getElementById('experienceModal').style.display = 'none';
+};
+// Закрытие по клику вне окна
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('experienceModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+
+// --- Календарь отпуска с листанием месяцев и подсветкой 14 дней ---
+
+let calendarYear = 2025;
+let calendarMonth = 0; // Январь по умолчанию
+
+const monthNames = [
+    "Январь","Февраль","Март","Апрель","Май","Июнь",
+    "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"
+];
+
+document.getElementById('vacationDaysCard').onclick = function() {
+    calendarYear = 2025;
+    calendarMonth = 0; // Январь
+    showVacationCalendar();
+    document.getElementById('vacationCalendarModal').style.display = 'flex';
+};
+document.getElementById('closeVacationCalendar').onclick = function() {
+    document.getElementById('vacationCalendarModal').style.display = 'none';
+};
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('vacationCalendarModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+document.getElementById('prevMonthBtn').onclick = function() {
+    calendarMonth--;
+    if (calendarMonth < 0) {
+        calendarMonth = 11;
+        calendarYear--;
+    }
+    showVacationCalendar();
+};
+document.getElementById('nextMonthBtn').onclick = function() {
+    calendarMonth++;
+    if (calendarMonth > 11) {
+        calendarMonth = 0;
+        calendarYear++;
+    }
+    showVacationCalendar();
+};
+
+function showVacationCalendar() {
+    const container = document.getElementById('calendarContainer');
+    container.innerHTML = '';
+    document.getElementById('calendarMonthLabel').textContent = monthNames[calendarMonth] + ' ' + calendarYear;
+
+    const firstDay = (new Date(calendarYear, calendarMonth, 1).getDay() + 6) % 7; // Пн=0
+    const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+
+    let table = document.createElement('table');
+    table.className = 'calendar-table';
+
+    // Заголовки дней недели
+    let thead = document.createElement('thead');
+    let row = document.createElement('tr');
+    ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => {
+        let th = document.createElement('th');
+        th.textContent = d;
+        row.appendChild(th);
+    });
+    thead.appendChild(row);
+    table.appendChild(thead);
+
+    // Ячейки дней месяца
+    let tbody = document.createElement('tbody');
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+    let tr = document.createElement('tr');
+    for (let j = 0; j < 7; j++) {
+        let td = document.createElement('td');
+        if ((i === 0 && j < firstDay) || date > daysInMonth) {
+            td.className = 'disabled';
+            td.textContent = '';
+        } else {
+            td.textContent = date;
+            let thisDate = date; // <--- вот это важно!
+            td.onclick = function() {
+                highlightVacationDays(thisDate, calendarMonth, calendarYear, table);
+            };
+            date++;
+        }
+        tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+}
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+function highlightVacationDays(startDate, month, year, table) {
+    // Сбросить выделение
+    table.querySelectorAll('td').forEach(td => td.classList.remove('selected'));
+
+    let day = startDate;
+    let m = month;
+    let y = year;
+    let count = 0;
+    let selectedDays = [];
+
+    while (count < 14) {
+        let daysInMonth = new Date(y, m + 1, 0).getDate();
+        for (; day <= daysInMonth && count < 14; day++, count++) {
+            selectedDays.push({day: day, month: m, year: y});
+        }
+        day = 1;
+        m++;
+        if (m > 11) { m = 0; y++; }
+    }
+
+    // Подсвечиваем только дни в текущем отображаемом месяце
+    table.querySelectorAll('td').forEach(td => {
+        let tdDay = parseInt(td.textContent);
+        if (isNaN(tdDay)) return;
+        selectedDays.forEach(sel => {
+            if (
+                sel.day === tdDay &&
+                sel.month === calendarMonth &&
+                sel.year === calendarYear &&
+                !td.classList.contains('disabled')
+            ) {
+                td.classList.add('selected');
+            }
+        });
+    });
+}
+
+// Открытие модального окна загрузки документов по дате
+document.querySelectorAll('.trip-date').forEach(function(elem){
+    elem.onclick = function() {
+        document.getElementById('tripUploadModal').style.display = 'flex';
+        document.getElementById('tripFiles').value = '';
+        document.getElementById('tripFilesList').innerHTML = '';
+        document.getElementById('tripUploadStatus').style.display = 'none';
+    };
+});
+document.getElementById('closeTripUploadModal').onclick = function() {
+    document.getElementById('tripUploadModal').style.display = 'none';
+};
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('tripUploadModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+// Ограничение до 5 файлов и отображение списка
+document.getElementById('tripFiles').onchange = function() {
+    const files = Array.from(this.files);
+    if (files.length > 5) {
+        this.value = '';
+        document.getElementById('tripFilesList').innerHTML = '<span style="color:#b22222;">Можно выбрать не более 5 файлов.</span>';
+    } else {
+        document.getElementById('tripFilesList').innerHTML = files.map(f => f.name).join('<br>');
+    }
+};
+
+// Обработка загрузки файлов (имитация)
+document.getElementById('tripUploadForm').onsubmit = function(e) {
+    e.preventDefault();
+    const files = document.getElementById('tripFiles').files;
+    if (!files.length) {
+        document.getElementById('tripUploadStatus').style.display = 'block';
+        document.getElementById('tripUploadStatus').textContent = 'Выберите хотя бы один файл.';
+        return;
+    }
+    document.getElementById('tripUploadStatus').style.display = 'block';
+    document.getElementById('tripUploadStatus').textContent = 'Файлы успешно загружены!';
+    setTimeout(() => {
+        document.getElementById('tripUploadModal').style.display = 'none';
+        document.getElementById('tripUploadStatus').style.display = 'none';
+    }, 1400);
+};
+
+// Открытие окна планирования командировки
+document.getElementById('planTripBtn').onclick = function() {
+    document.getElementById('planTripModal').style.display = 'flex';
+    document.getElementById('planTripForm').reset();
+};
+document.getElementById('closePlanTripModal').onclick = function() {
+    document.getElementById('planTripModal').style.display = 'none';
+};
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('planTripModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+// Кнопка "Заказать билеты" — переход на aviasales
+document.getElementById('orderTicketsBtn').onclick = function() {
+    window.open('https://www.aviasales.ru/', '_blank');
+};
+
+
+// Открытие модального окна по кнопке "Добавить дополнительные файлы"
+document.querySelectorAll('.add-files-btn').forEach(function(btn){
+    btn.onclick = function() {
+        document.getElementById('addFilesModal').style.display = 'flex';
+        document.getElementById('addFilesInput').value = '';
+        document.getElementById('addFilesList').innerHTML = '';
+        document.getElementById('addFilesStatus').style.display = 'none';
+        // Можно сохранить data-trip, если нужно знать для какой командировки файлы
+        document.getElementById('addFilesForm').setAttribute('data-trip', btn.getAttribute('data-trip'));
+    };
+});
+document.getElementById('closeAddFilesModal').onclick = function() {
+    document.getElementById('addFilesModal').style.display = 'none';
+};
+window.addEventListener('click', function(event) {
+    var modal = document.getElementById('addFilesModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+// Ограничение до 5 файлов и отображение списка
+document.getElementById('addFilesInput').onchange = function() {
+    const files = Array.from(this.files);
+    if (files.length > 5) {
+        this.value = '';
+        document.getElementById('addFilesList').innerHTML = '<span style="color:#b22222;">Можно выбрать не более 5 файлов.</span>';
+    } else {
+        document.getElementById('addFilesList').innerHTML = files.map(f => f.name).join('<br>');
+    }
+};
+
+// Имитация загрузки файлов
+document.getElementById('addFilesForm').onsubmit = function(e) {
+    e.preventDefault();
+    const files = document.getElementById('addFilesInput').files;
+    if (!files.length) {
+        document.getElementById('addFilesStatus').style.display = 'block';
+        document.getElementById('addFilesStatus').textContent = 'Выберите хотя бы один файл.';
+        return;
+    }
+    document.getElementById('addFilesStatus').style.display = 'block';
+    document.getElementById('addFilesStatus').textContent = 'Файлы успешно загружены!';
+    setTimeout(() => {
+        document.getElementById('addFilesModal').style.display = 'none';
+        document.getElementById('addFilesStatus').style.display = 'none';
+    }, 1400);
+};
+
+document.getElementById('bookHotelBtn').onclick = function() {
+    window.open('https://travel.yandex.ru/hotels/', '_blank');
+};
+
+document.getElementById('submitForApprovalBtn').onclick = function() {
+    var msg = document.getElementById('approvalMsg');
+    msg.style.display = 'block';
+    setTimeout(function() {
+        msg.style.display = 'none';
+        document.getElementById('planTripModal').style.display = 'none';
+    }, 3000);
+};
+
+document.getElementById('calcVacationPayBtn').onclick = function() {
+    // Генерируем случайные даты отпуска (пример: 14 дней)
+    const days = 14;
+    const today = new Date();
+    const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const end = new Date(start);
+    end.setDate(start.getDate() + days - 1);
+
+    // Форматируем даты
+    function formatDate(d) {
+        return d.toLocaleDateString('ru-RU');
+    }
+
+    // Считаем сумму: 4 000 ₽ за каждый день
+    const pay = days * 4000;
+
+    // Заполняем модальное окно
+    document.getElementById('vacationPayInfo').textContent =
+        `Даты отпуска: ${formatDate(start)} – ${formatDate(end)} (${days} дней)`;
+    document.getElementById('vacationPaySum').textContent =
+        `Сумма к выплате: ${pay.toLocaleString()} ₽`;
+
+    document.getElementById('vacationPayModal').style.display = 'flex';
+};
+
+document.getElementById('closeVacationPayModal').onclick = function() {
+    document.getElementById('vacationPayModal').style.display = 'none';
+};
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('vacationPayModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+
+document.getElementById('calcVacationPayBtn').onclick = function() {
+    // Получаем выбранные даты
+    const startInput = document.getElementById('start-date').value;
+    const endInput = document.getElementById('end-date').value;
+
+    if (!startInput || !endInput) {
+        alert('Пожалуйста, выберите даты отпуска.');
+        return;
+    }
+
+    const start = new Date(startInput);
+    const end = new Date(endInput);
+
+    // Проверка: дата окончания >= даты начала
+    if (end < start) {
+        alert('Дата окончания отпуска не может быть раньше даты начала.');
+        return;
+    }
+
+    // Количество дней (включительно)
+    const days = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    // Считаем сумму: 4 000 ₽ за каждый день
+    const pay = days * 4000;
+
+    // Форматируем даты
+    function formatDate(d) {
+        return d.toLocaleDateString('ru-RU');
+    }
+
+    // Заполняем модальное окно
+    document.getElementById('vacationPayInfo').textContent =
+        `Даты отпуска: ${formatDate(start)} – ${formatDate(end)} (${days} дней)`;
+    document.getElementById('vacationPaySum').textContent =
+        `Сумма к выплате: ${pay.toLocaleString()} ₽`;
+
+    document.getElementById('vacationPayModal').style.display = 'flex';
+};
+
+document.getElementById('closeVacationPayModal').onclick = function() {
+    document.getElementById('vacationPayModal').style.display = 'none';
+};
+
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('vacationPayModal');
+    if (modal && event.target === modal) modal.style.display = 'none';
+});
+
+
+
+    </script>
+
+
+<footer class="footer-confidential">
+    Вся информация конфиденциальная.<br>
+    В Компании запрещено распространение личных данных.
+</footer>
+
+
+</body>
+</html>
