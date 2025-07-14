@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -272,6 +272,105 @@
   min-width: 220px;
 }
 
+.modal {
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 38px 22px 38px;
+  min-width: 410px;
+  box-shadow: 0 8px 32px rgba(178,34,34,0.13);
+  position: relative;
+}
+.modal-close {
+  position: absolute; right: 22px; top: 18px;
+  font-size: 32px; color: #b22222; cursor: pointer;
+}
+.modal-title {
+  font-size: 22px; font-weight: 600; color: #b22222; margin-bottom: 18px; text-align: center;
+}
+#compensationForm label { font-weight: 500; color: #b22222; margin-top: 10px; display: block; }
+#compensationForm input[type="text"], #compensationForm textarea {
+  width: 100%; margin-bottom: 8px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 7px 9px; font-size: 15px;
+}
+#compensationForm textarea { min-height: 60px; resize: vertical; }
+.gantt-create-btn {
+  background: #b22222; color: #fff; border: none; border-radius: 6px;
+  padding: 9px 22px; font-size: 16px; cursor: pointer; font-weight: 500;
+  transition: background 0.15s;
+}
+.gantt-create-btn:hover { background: #a51c1c; }
+.file-upload-label { cursor:pointer; }
+
+
+.comp-btn-label {
+  flex: 1;
+  margin: 0;
+  display: flex;
+}
+
+.compensation-btn {
+  width: 100%;
+  min-width: 140px;
+  height: 44px;
+  box-sizing: border-box;
+  text-align: center;
+  background: #b22222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+  display: block;
+  line-height: normal;
+  padding: 0;
+}
+
+.compensation-btn:hover {
+  background: #a51c1c;
+}
+
+
+.compensation-btn {
+  width: 100%;
+  min-width: 140px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 9px 0;
+  background: #b22222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.15s;
+  height: 42px;
+  display: inline-block;
+  line-height: normal;
+}
+.compensation-btn:hover {
+  background: #a51c1c;
+}
+.file-upload-label {
+  flex: 1;
+  margin: 0;
+}
+#compensationForm button[type="submit"] {
+  flex: 1;
+}
+#openCompensationModal {
+  cursor: pointer;
+}
+
+
 
 
         /* Модальное окно для структуры департамента */
@@ -539,6 +638,59 @@
             color: #333;
             text-align: center;
         }
+
+
+
+.gantt-arrow-btn, .gantt-create-btn {
+  background: #b22222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.gantt-arrow-btn:hover, .gantt-create-btn:hover {
+  background: #a51c1c;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.modal {
+  position: fixed;
+  z-index: 1001;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 14px;
+  padding: 32px 38px 22px 38px;
+  min-width: 410px;
+  box-shadow: 0 8px 32px rgba(178,34,34,0.13);
+  position: relative;
+}
+.modal-close {
+  position: absolute; right: 22px; top: 18px;
+  font-size: 32px; color: #b22222; cursor: pointer;
+}
+.modal-title {
+  font-size: 22px; font-weight: 600; color: #b22222; margin-bottom: 18px; text-align: center;
+}
+#meetingForm label { font-weight: 500; color: #b22222; margin-top: 10px; display: block; }
+#meetingForm input, #meetingForm select, #meetingForm textarea {
+  width: 100%; margin-bottom: 8px; border: 1px solid #e0e0e0; border-radius: 5px; padding: 7px 9px; font-size: 15px;
+}
+#meetingForm textarea { min-height: 60px; resize: vertical; }
+
+
+
+
 
  /* Gantt modal */
         .gantt-modal {
@@ -819,6 +971,98 @@
 </div>
         </div>
 
+<!-- Блок "Ваши встречи" -->
+<div class="section" id="meetings-section" style="margin-top:32px;">
+  <div class="section-title" style="display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-size:20px; color:#b22222;">Ваши встречи</span>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button id="prevWeekBtn" class="gantt-arrow-btn">&#8592;</button>
+      <span id="ganttWeekLabel" style="font-size:15px; min-width:110px; text-align:center;"></span>
+      <button id="nextWeekBtn" class="gantt-arrow-btn">&#8594;</button>
+      <button id="createMeetingBtn" class="gantt-create-btn">Создать встречу</button>
+    </div>
+  </div>
+  <div style="display:flex; gap:18px;">
+    <!-- Календарь слева -->
+    <div id="gantt-calendar" style="width:110px; min-width:110px; background:#fff5f5; border-radius:8px; padding:10px 0;">
+      <div id="calendarMonth" style="text-align:center; color:#b22222; font-weight:600; margin-bottom:7px;"></div>
+      <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; font-size:13px; color:#b22222;">
+        <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span>
+      </div>
+      <div id="calendarDays" style="display:grid; grid-template-columns:repeat(7,1fr); gap:2px; font-size:13px; color:#b22222; margin-top:2px;"></div>
+    </div>
+    <!-- Диаграмма Ганта -->
+    <canvas id="meetingsGantt" width="760" height="220" style="margin-top:0; border-radius:10px; background:#fff; box-shadow:0 1px 6px rgba(178,34,34,0.09);"></canvas>
+  </div>
+</div>
+
+<!-- Модальное окно деталей встречи -->
+<div class="modal" id="meetingDetailsModal" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" id="closeMeetingDetailsModal">&times;</span>
+    <div class="modal-title" id="meetingDetailsTitle"></div>
+    <div style="margin-bottom:10px; color:#b22222;" id="meetingDetailsTime"></div>
+    <div style="margin-bottom:10px;" id="meetingDetailsLocation"></div>
+    <div style="margin-bottom:10px;" id="meetingDetailsAttendees"></div>
+    <div style="margin-bottom:10px;" id="meetingDetailsMessage"></div>
+    <div style="display:flex; gap:12px; margin-top:16px;">
+      <button type="button" id="editMeetingBtn" class="gantt-create-btn" style="background:#b22222;">Редактировать</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно создания встречи -->
+<div class="modal" id="createMeetingModal" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" id="closeCreateMeetingModal">&times;</span>
+    <div class="modal-title">Создать встречу</div>
+    <form id="meetingForm">
+      <label>Тема:</label>
+      <input type="text" id="meetingSubject" required>
+      <label>Место:</label>
+      <input type="text" id="meetingLocation">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <div>
+          <label>Дата:</label>
+          <input type="date" id="meetingDate" required>
+        </div>
+        <div>
+          <label>Время начала:</label>
+          <select id="meetingTime" required></select>
+        </div>
+        <div>
+          <label>Длительность:</label>
+          <select id="meetingDuration" required>
+            <option value="15">15 минут</option>
+            <option value="30">30 минут</option>
+            <option value="45">45 минут</option>
+            <option value="60">1 час</option>
+            <option value="90">1 час 30 минут</option>
+            <option value="120">2 часа</option>
+            <option value="150">2 часа 30 минут</option>
+            <option value="180">3 часа</option>
+          </select>
+        </div>
+      </div>
+      <label>Сообщение:</label>
+      <textarea id="meetingMessage"></textarea>
+      <!-- Новый блок для добавления участников -->
+      <div style="display:flex; gap:12px; margin-top:16px;">
+        <button type="button" id="addAttendeesBtn" class="gantt-create-btn" style="background:#b22222;">Добавить участников</button>
+        <button type="submit" class="gantt-create-btn" style="background:#b22222;">Создать</button>
+      </div>
+      <!-- Поле для ввода e-mail участников (скрыто по умолчанию, появляется по кнопке) -->
+      <div id="attendeesBlock" style="margin-top:12px; display:none;">
+        <label>Участники (через запятую, e-mail):</label>
+        <input type="text" id="meetingAttendees" placeholder="user1@company.com, user2@company.com">
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+
 
 <!-- Планирование отпуска -->
 <div class="section">
@@ -1046,10 +1290,13 @@
             <span class="social-icon">&#128176;</span>
             <span class="social-label">Скидки</span>
         </a>
-        <div class="social-item">
-            <span class="social-icon">&#128178;</span>
-            <span class="social-label">Компенсации</span>
-        </div>
+<div class="social-item" id="openCompensationModal">
+    <span class="social-icon">&#128178;</span>
+    <span class="social-label">Компенсации</span>
+</div>
+
+
+
         <a class="social-item" href="https://reso.ru/service/agents-search/?utm_source=yandex&utm_medium=cpc&utm_campaign=site_brand_common&yclid=8587809669294063615" target="_blank" style="text-decoration:none;">
             <span class="social-icon">&#10084;&#65039;</span>
             <span class="social-label">Страхование жизни</span>
@@ -1063,8 +1310,53 @@
     </div>
   
 
+
+<!-- Модальное окно компенсации -->
+<div class="modal" id="compensationModal" style="display:none;">
+  <div class="modal-content">
+    <span class="modal-close" id="closeCompensationModal">&times;</span>
+    <div class="modal-title">Оставить заявку на компенсацию</div>
+    <form id="compensationForm">
+      <label>Имя сотрудника:</label>
+      <input type="text" id="employeeName" value="Дрига Виктор Александрович" readonly style="background:#f7f7f7;">
+      <label for="expensePurpose">Назначение расходов:</label>
+      <input type="text" id="expensePurpose" placeholder="например: спортзал, командировка, проезд и др." autocomplete="off" required>
+      <label for="compensationMessage">Обращение к руководству:</label>
+      <textarea id="compensationMessage" placeholder="Поясните причину компенсации..." required></textarea>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <label class="comp-btn-label" style="flex:1; margin:0; display:flex;">
+          <input type="file" id="compensationFiles" multiple style="display:none;">
+          <span class="compensation-btn" style="width:100%;">Добавить файлы</span>
+        </label>
+        <button type="submit" class="compensation-btn" style="flex:1;">Отправить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Всплывающее сообщение ВНЕ формы -->
+<div id="compensationToast" style="
+    display:none;
+    position:fixed;
+    left:50%;
+    bottom:40px;
+    transform:translateX(-50%);
+    background:#4caf50;
+    color:#fff;
+    padding:16px 28px;
+    border-radius:8px;
+    font-size:17px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.10);
+    z-index:9999;
+    text-align:center;
+">
+    Спасибо! Ваша заявка направлена на рассмотрение Руководству
+</div>
+
+
+
  <!-- Модальное окно структуры отдела -->
-<div class="modal" id="structureModal">
+<div class="modal" id="structureModal" style="display: none;">
     <div class="modal-content">
         <span class="modal-close" id="closeStructure">&times;</span>
         <div class="section-title" style="margin-top:0;">Структура отдела развития цифровых технологий</div>
@@ -2395,6 +2687,383 @@ window.addEventListener('click', function(event) {
 
 
     </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Пример встреч (можно заменить на загрузку из Outlook)
+  let meetings = [
+    {
+      subject: "Планерка",
+      start: "2025-07-14T10:00:00",
+      end: "2025-07-14T11:00:00",
+      location: "Переговорная 2",
+      message: "Обсудим планы на неделю",
+      attendees: ["user1@company.com", "user2@company.com"]
+    },
+    {
+      subject: "Встреча с отделом",
+      start: "2025-07-15T15:00:00",
+      end: "2025-07-15T16:00:00",
+      location: "Zoom",
+      message: "Вопросы по проекту",
+      attendees: ["user1@company.com", "user2@company.com"]
+    }
+  ];
+
+  // Заполнение выпадающего списка времени (шаг 15 минут, с 9:00 до 17:45)
+  const meetingTime = document.getElementById('meetingTime');
+  if (meetingTime) {
+    for (let h = 9; h <= 17; h++) {
+      for (let m = 0; m < 60; m += 15) {
+        if (h === 17 && m > 45) break;
+        let hour = h.toString().padStart(2, '0');
+        let min = m.toString().padStart(2, '0');
+        let timeStr = `${hour}:${min}`;
+        let option = document.createElement('option');
+        option.value = timeStr;
+        option.textContent = timeStr;
+        meetingTime.appendChild(option);
+      }
+    }
+  }
+
+  // Модальные окна
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = 'flex';
+  }
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = 'none';
+  }
+  const createBtn = document.getElementById('createMeetingBtn');
+  if (createBtn) createBtn.onclick = () => openModal('createMeetingModal');
+  const closeCreateBtn = document.getElementById('closeCreateMeetingModal');
+  if (closeCreateBtn) closeCreateBtn.onclick = () => closeModal('createMeetingModal');
+  const closeDetailsBtn = document.getElementById('closeMeetingDetailsModal');
+  if (closeDetailsBtn) closeDetailsBtn.onclick = () => closeModal('meetingDetailsModal');
+  window.onclick = function(e) {
+    if (e.target.classList && e.target.classList.contains('modal')) e.target.style.display = 'none';
+  };
+
+  // Кнопка "Добавить участников" — показывает поле для e-mail
+  const addAttendeesBtn = document.getElementById('addAttendeesBtn');
+  if (addAttendeesBtn) {
+    addAttendeesBtn.onclick = function() {
+      document.getElementById('attendeesBlock').style.display = 'block';
+      this.style.display = 'none';
+    };
+  }
+
+  // Блокировка выбора выходных и прошедших дней в форме создания встречи
+  document.getElementById('meetingDate').addEventListener('change', function() {
+    const date = new Date(this.value);
+    const day = date.getDay();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (day === 0 || day === 6) {
+      alert('Встречи можно назначать только на рабочие дни (Пн–Пт)');
+      this.value = '';
+      return;
+    }
+    if (date < today) {
+      alert('Нельзя создавать встречи в прошлом!');
+      this.value = '';
+      return;
+    }
+  });
+
+  // Создание/редактирование встречи (рабочие дни, не в прошлом, с участниками)
+  document.getElementById('meetingForm').onsubmit = function(e) {
+    e.preventDefault();
+    const subject = document.getElementById('meetingSubject').value;
+    const location = document.getElementById('meetingLocation').value;
+    const date = document.getElementById('meetingDate').value;
+    const time = document.getElementById('meetingTime').value;
+    const duration = +document.getElementById('meetingDuration').value;
+    const message = document.getElementById('meetingMessage').value;
+    const attendeesInput = document.getElementById('meetingAttendees');
+    let attendees = [];
+    if (attendeesInput && attendeesInput.value.trim() !== '') {
+      attendees = attendeesInput.value.split(',').map(email => email.trim());
+    }
+
+    const selectedDate = new Date(date);
+    const day = selectedDate.getDay();
+    const now = new Date();
+    const [h, m] = time.split(':').map(Number);
+    const start = new Date(date);
+    start.setHours(h, m, 0, 0);
+    const end = new Date(start.getTime() + duration * 60000);
+
+    if (day === 0 || day === 6) {
+      alert('Встречи можно назначать только на рабочие дни (Пн–Пт)');
+      return;
+    }
+    if (start < now) {
+      alert('Нельзя создавать встречи в прошлом!');
+      return;
+    }
+
+    if (window.editMeetingIdx !== undefined) {
+      meetings[window.editMeetingIdx] = {
+        subject,
+        start: start.toISOString(),
+        end: end.toISOString(),
+        location,
+        message,
+        attendees
+      };
+      window.editMeetingIdx = undefined;
+    } else {
+      meetings.push({
+        subject,
+        start: start.toISOString(),
+        end: end.toISOString(),
+        location,
+        message,
+        attendees
+      });
+    }
+    closeModal('createMeetingModal');
+    updateAll();
+  };
+
+  // Диаграмма Ганта и календарь
+  let currentMonday = getMonday(new Date());
+
+  function getMonday(d) {
+    d = new Date(d);
+    let day = d.getDay() || 7;
+    if (day !== 1) d.setDate(d.getDate() - day + 1);
+    d.setHours(0,0,0,0);
+    return d;
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  function updateCalendar() {
+    const monthDiv = document.getElementById('calendarMonth');
+    const daysDiv = document.getElementById('calendarDays');
+    let month = currentMonday.toLocaleString('ru-RU', { month: 'long', year: 'numeric' });
+    monthDiv.textContent = month.charAt(0).toUpperCase() + month.slice(1);
+
+    let firstDay = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), 1);
+    let startDayIdx = (firstDay.getDay() + 6) % 7;
+    let daysInMonth = new Date(currentMonday.getFullYear(), currentMonday.getMonth() + 1, 0).getDate();
+    let today = new Date();
+    today.setHours(0,0,0,0);
+
+    let html = '';
+    for (let i = 0; i < startDayIdx; i++) html += `<span></span>`;
+    for (let d = 1; d <= daysInMonth; d++) {
+      let dayDate = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), d);
+      let weekDay = dayDate.getDay();
+      let isWorkDay = weekDay >= 1 && weekDay <= 5;
+      let isPast = dayDate < today;
+      let isWeek = dayDate >= currentMonday && dayDate < new Date(currentMonday.getTime() + 5*86400000);
+
+      let style = '';
+      if (!isWorkDay || isPast) style += 'opacity:0.3;';
+      if (isWeek && isWorkDay && !isPast) style += 'background:#b22222;color:#fff;border-radius:4px;';
+      html += `<span style="${style}">${d}</span>`;
+    }
+    daysDiv.innerHTML = html;
+  }
+
+  function drawMeetingsGantt() {
+    const canvas = document.getElementById('meetingsGantt');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Ось рабочих дней недели и сетка (Пн–Пт)
+    const weekDays = ['Пн','Вт','Ср','Чт','Пт'];
+    for (let i = 0; i < 5; i++) {
+      let x = 30 + i * 150;
+      ctx.font = "14px Segoe UI, Arial";
+      ctx.fillStyle = "#b22222";
+      ctx.fillText(weekDays[i], x+35, 30);
+      ctx.strokeStyle = "#ffeaea";
+      ctx.beginPath();
+      ctx.moveTo(x, 40);
+      ctx.lineTo(x, 200);
+      ctx.stroke();
+    }
+
+    // Встречи (красные полосы) — только на рабочие дни
+    let weekStart = new Date(currentMonday);
+    let weekEnd = new Date(currentMonday.getTime() + 5*86400000);
+
+    let filteredMeetings = meetings.filter(mtg => {
+      let d = new Date(mtg.start);
+      let day = d.getDay();
+      return d >= weekStart && d < weekEnd && day >= 1 && day <= 5;
+    });
+
+    // Для клика по встрече
+    window.meetingBarCoords = [];
+
+    filteredMeetings.forEach((mtg, idx) => {
+      let date = new Date(mtg.start);
+      let dayIdx = date.getDay() - 1; // Пн=0 ... Пт=4
+      let startHour = date.getHours() + date.getMinutes()/60;
+      let endHour = new Date(mtg.end).getHours() + new Date(mtg.end).getMinutes()/60;
+      let barX = 30 + dayIdx * 150 + (startHour-9)*8;
+      let barY = 55 + idx * 36;
+      let barW = (endHour - startHour) * 60;
+      ctx.save();
+      ctx.shadowColor = 'rgba(178,34,34,0.09)';
+      ctx.shadowBlur = 6;
+      ctx.fillStyle = "#b22222";
+      ctx.fillRect(barX, barY, barW, 22);
+      ctx.restore();
+      ctx.fillStyle = "#fff";
+      ctx.font = "13px Segoe UI, Arial";
+      ctx.fillText(mtg.subject, barX + 7, barY + 16);
+
+      // Координаты для клика
+      window.meetingBarCoords.push({
+        x: barX, y: barY, w: barW, h: 22, mtg, idx
+      });
+    });
+  }
+
+  function updateWeekLabel() {
+    const label = document.getElementById('ganttWeekLabel');
+    let weekEnd = new Date(currentMonday.getTime() + 4*86400000);
+    label.textContent = `${formatDate(currentMonday)} – ${formatDate(weekEnd)}`;
+  }
+
+  function updateAll() {
+    updateCalendar();
+    updateWeekLabel();
+    drawMeetingsGantt();
+  }
+
+  const prevBtn = document.getElementById('prevWeekBtn');
+  if (prevBtn) prevBtn.onclick = function() {
+    currentMonday.setDate(currentMonday.getDate() - 7);
+    updateAll();
+  };
+  const nextBtn = document.getElementById('nextWeekBtn');
+  if (nextBtn) nextBtn.onclick = function() {
+    currentMonday.setDate(currentMonday.getDate() + 7);
+    updateAll();
+  };
+
+  // Клик по встрече на диаграмме — детали + участники + редактирование
+const ganttCanvas = document.getElementById('meetingsGantt');
+if (ganttCanvas) {
+  ganttCanvas.onclick = function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    let found = false;
+    (window.meetingBarCoords || []).forEach(bar => {
+      if (
+        x >= bar.x && x <= bar.x + bar.w &&
+        y >= bar.y && y <= bar.y + bar.h
+      ) {
+        // Получаем локальное время для начала и конца встречи
+        const startDate = new Date(bar.mtg.start);
+        const endDate = new Date(bar.mtg.end);
+        const startTime = startDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const endTime = endDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+
+        document.getElementById('meetingDetailsTitle').textContent = bar.mtg.subject;
+        document.getElementById('meetingDetailsTime').textContent =
+          `Время: ${formatDate(startDate)} ${startTime} – ${endTime}`;
+        document.getElementById('meetingDetailsLocation').textContent =
+          bar.mtg.location ? `Место: ${bar.mtg.location}` : '';
+        document.getElementById('meetingDetailsMessage').textContent =
+          bar.mtg.message ? `Сообщение: ${bar.mtg.message}` : '';
+        document.getElementById('meetingDetailsAttendees').textContent =
+          bar.mtg.attendees && bar.mtg.attendees.length
+            ? `Участники: ${bar.mtg.attendees.join(', ')}`
+            : 'Участники: —';
+        openModal('meetingDetailsModal');
+        window.currentMeetingIdx = bar.idx;
+        found = true;
+      }
+    });
+    if (!found) closeModal('meetingDetailsModal');
+  };
+}
+
+
+  // Кнопка "Редактировать" в деталях встречи
+  const editBtn = document.getElementById('editMeetingBtn');
+  if (editBtn) {
+    editBtn.onclick = function() {
+      if (window.currentMeetingIdx !== undefined) {
+        const mtg = meetings[window.currentMeetingIdx];
+        document.getElementById('meetingSubject').value = mtg.subject;
+        document.getElementById('meetingLocation').value = mtg.location;
+        document.getElementById('meetingDate').value = mtg.start.substr(0,10);
+        document.getElementById('meetingTime').value = mtg.start.substr(11,5);
+        document.getElementById('meetingDuration').value =
+          (new Date(mtg.end) - new Date(mtg.start)) / 60000;
+        if (mtg.attendees && mtg.attendees.length) {
+          document.getElementById('attendeesBlock').style.display = 'block';
+          const addBtn = document.getElementById('addAttendeesBtn');
+          if (addBtn) addBtn.style.display = 'none';
+          document.getElementById('meetingAttendees').value = mtg.attendees.join(', ');
+        }
+        document.getElementById('meetingMessage').value = mtg.message || '';
+        closeModal('meetingDetailsModal');
+        openModal('createMeetingModal');
+        window.editMeetingIdx = window.currentMeetingIdx;
+      }
+    };
+  }
+
+  updateAll();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Открытие/закрытие модального окна
+  document.getElementById('openCompensationModal').onclick = function() {
+    document.getElementById('compensationModal').style.display = 'flex';
+    // Очистить форму при каждом открытии
+    document.getElementById('compensationForm').reset();
+    document.getElementById('expensePurpose').placeholder = "например: спортзал, командировка, проезд и др.";
+  };
+  document.getElementById('closeCompensationModal').onclick = function() {
+    document.getElementById('compensationModal').style.display = 'none';
+  };
+  window.onclick = function(e) {
+    const modal = document.getElementById('compensationModal');
+    if (e.target === modal) modal.style.display = 'none';
+  };
+
+  // Предтекст для поля "Назначение расходов"
+  const expensePurpose = document.getElementById('expensePurpose');
+  expensePurpose.addEventListener('focus', function() {
+    this.placeholder = '';
+  });
+  expensePurpose.addEventListener('blur', function() {
+    if (!this.value) this.placeholder = "например: спортзал, командировка, проезд и др.";
+  });
+
+  // Отправка формы и показ всплывающего окна
+  document.getElementById('compensationForm').onsubmit = function(e) {
+    e.preventDefault();
+    document.getElementById('compensationModal').style.display = 'none';
+    const toast = document.getElementById('compensationToast');
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+    // Здесь можно добавить отправку данных на сервер
+  };
+});
+</script>
+
+
 
 
 <footer class="footer-confidential">
